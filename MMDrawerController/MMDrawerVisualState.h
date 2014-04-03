@@ -27,6 +27,10 @@
  */
 
 @interface MMDrawerVisualState : NSObject
+/**
+ Creates a scaled 3D visual state similar to Airbnb.app. It scales, rotate and
+ */
++(MMDrawerControllerDrawerVisualStateBlock)scale3dVisualStateBlock;
 
 /**
  Creates a slide and scale visual state block that gives an experience similar to Mailbox.app. It scales from 90% to 100%, and translates 50 pixels in the x direction. In addition, it also sets alpha from 0.0 to 1.0.
