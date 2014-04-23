@@ -306,6 +306,7 @@ static NSString *MMDrawerOpenSideKey = @"MMDrawerOpenSide";
              [self setOpenSide:MMDrawerSideNone];
              [self resetDrawerVisualStateForDrawerSide:visibleSide];
              [self setAnimatingDrawer:NO];
+             self.centerViewController.view.layer.transform = CATransform3DIdentity;
              if(completion){
                  completion(finished);
              }
