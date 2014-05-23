@@ -27,16 +27,16 @@
     MMDrawerControllerDrawerVisualStateBlock visualStateBlock =
     ^(MMDrawerController * drawerController, MMDrawerSide drawerSide, CGFloat percentVisible){
         CATransform3D transform = CATransform3DIdentity;
-        transform.m34 = 1.0/-500;
-        transform = CATransform3DRotate(transform,(-25 * percentVisible)* M_PI / 180, 0, 1, 0);
+        transform.m34 = (CGFloat) ((1.0 / -500)*percentVisible);
+        transform = CATransform3DRotate(transform, (CGFloat) ((-25 * percentVisible)* M_PI / 180), 0, 1, 0);
         transform = CATransform3DScale(transform, (1-0.3*percentVisible), (1-0.3*percentVisible), (1-0.3*percentVisible));
         transform = CATransform3DTranslate(transform, (-120)*percentVisible, 0, 0);
         drawerController.centerViewController.view.layer.transform = transform;
-        
+
         transform = CATransform3DIdentity;
         CGFloat delta = .5;
-        transform = CATransform3DMakeScale(1+delta*(1-percentVisible), 1+delta*(1-percentVisible), 1+delta*(1-percentVisible));
-        transform = CATransform3DTranslate(transform, -120*(1-percentVisible), 0, 0);
+        transform = CATransform3DMakeScale(1 + delta * (1 - percentVisible), 1 + delta * (1 - percentVisible), 1 + delta * (1 - percentVisible));
+        transform = CATransform3DTranslate(transform, -120 * (1 - percentVisible), 0, 0);
         drawerController.leftDrawerViewController.view.layer.transform = transform;
         drawerController.leftDrawerViewController.view.layer.opacity = .3+.7*powf(percentVisible,2);
         return ;
@@ -50,7 +50,7 @@
         CGFloat minScale = .90;
         CGFloat scale = minScale + (percentVisible*(1.0-minScale));
         CATransform3D scaleTransform =  CATransform3DMakeScale(scale, scale, scale);
-        
+
         CGFloat maxDistance = 50;
         CGFloat distance = maxDistance * percentVisible;
         CATransform3D translateTransform = CATransform3DIdentity;
@@ -63,7 +63,7 @@
             sideDrawerViewController = drawerController.rightDrawerViewController;
             translateTransform = CATransform3DMakeTranslation(-(maxDistance-distance), 0.0, 0.0);
         }
-        
+
         [sideDrawerViewController.view.layer setTransform:CATransform3DConcat(scaleTransform, translateTransform)];
         [sideDrawerViewController.view setAlpha:percentVisible];
     };
@@ -83,9 +83,9 @@
         CGFloat maxDrawerWidth = 0.0;
         CGFloat xOffset;
         CGFloat angle = 0.0;
-        
+
         if(drawerSide==MMDrawerSideLeft){
-            
+
             sideDrawerViewController = drawerController.leftDrawerViewController;
             anchorPoint =  CGPointMake(1.0, .5);
             maxDrawerWidth = MAX(drawerController.maximumLeftDrawerWidth,drawerController.visibleLeftDrawerWidth);
@@ -99,36 +99,36 @@
             xOffset = (maxDrawerWidth/2.0) - (maxDrawerWidth)*percentVisible;
             angle = M_PI_2-(percentVisible*M_PI_2);
         }
-        
+
         [sideDrawerViewController.view.layer setAnchorPoint:anchorPoint];
         [sideDrawerViewController.view.layer setShouldRasterize:YES];
         [sideDrawerViewController.view.layer setRasterizationScale:[[UIScreen mainScreen] scale]];
-        
+
         CATransform3D swingingDoorTransform = CATransform3DIdentity;
         if (percentVisible <= 1.f) {
-            
+
             CATransform3D identity = CATransform3DIdentity;
             identity.m34 = -1.0/1000.0;
             CATransform3D rotateTransform = CATransform3DRotate(identity, angle, 0.0, 1.0, 0.0);
-            
+
             CATransform3D translateTransform = CATransform3DMakeTranslation(xOffset, 0.0, 0.0);
-            
+
             CATransform3D concatTransform = CATransform3DConcat(rotateTransform, translateTransform);
-            
+
             swingingDoorTransform = concatTransform;
         }
         else{
             CATransform3D overshootTransform = CATransform3DMakeScale(percentVisible, 1.f, 1.f);
-            
+
             NSInteger scalingModifier = 1.f;
             if (drawerSide == MMDrawerSideRight) {
                 scalingModifier = -1.f;
             }
-            
+
             overshootTransform = CATransform3DTranslate(overshootTransform, scalingModifier*maxDrawerWidth/2, 0.f, 0.f);
             swingingDoorTransform = overshootTransform;
         }
-        
+
         [sideDrawerViewController.view.layer setTransform:swingingDoorTransform];
     };
     return visualStateBlock;
@@ -162,7 +162,7 @@
                 transform = CATransform3DTranslate(transform, -drawerController.maximumRightDrawerWidth*(percentVisible-1.f)/2, 0.f, 0.f);
             }
         }
-        
+
         [sideDrawerViewController.view.layer setTransform:transform];
     };
     return visualStateBlock;
